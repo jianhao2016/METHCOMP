@@ -43,28 +43,6 @@ std::string convertRGB(uint8_t percentage){
 }
 
 void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString){
-    // static int32_t chromStartOld(0);
-    // static int32_t bufferLineNum(0);
-    // static std::string bufferList;
-    // bufferList.reserve(40960000);
-    //
-    // int32_t chromStart = arInt.m_chromStartDiff + chromStartOld;
-    // int32_t chromEnd = chromStart + 1;
-    // chromStartOld = chromStart;
-    // bufferList += chromString +  '\t' +  std::to_string(chromStart) +  '\t' +  std::to_string(chromEnd) + '\t';
-    //
-    // int32_t score = min(arInt.m_readCount, 1000);
-    // bufferList += nameString + '\t' + std::to_string(score) + '\t' + arInt.m_strand + '\t';
-    //
-    // bufferList += std::to_string(chromStart) + '\t' + std::to_string(chromEnd) +'\t';
-    // std::string rgb = convertRGB(arInt.m_percentage);
-    // bufferList += rgb + '\t' + std::to_string(arInt.m_readCount) + '\t' + std::to_string(static_cast<unsigned int>(arInt.m_percentage)) + '\n';
-    // bufferLineNum++;
-    // if (bufferLineNum == 100000) {
-    //     bufferLineNum = 0;
-    //     reassembleFile << bufferList;
-    //     bufferList.clear();
-    // }
 
     static int32_t chromStartOld(0);
     int32_t chromStart = arInt.m_chromStartDiff + chromStartOld;

@@ -17,13 +17,6 @@ StrandDecoder::StrandDecoder(const Base& base, int16_t no_of_chars) :
         m_strandList.push_back('+');
         m_strandList.push_back('-');
         m_strandList.push_back('.');
-
-        // if (fileName != " ") {
-        //     std::ofstream outfile("../data/" + fileName, std::ios::out);
-        //     if (outfile.is_open()) {
-        //         m_outfile = std::move(outfile);
-        //     }
-        // }
     }
 
 StrandDecoder::~StrandDecoder() {
@@ -47,10 +40,6 @@ char StrandDecoder::decoder(Base& base, InputBitStream& ibs) {
     for (size_t ii = 0; ii < m_strandList.size(); ii++) {
         if (ch == ii) {
             strand = m_strandList[ii];
-
-            // if (m_outfile.is_open()) {
-            //     m_outfile << strand << '\n';
-            // }
 
             return strand;
         }

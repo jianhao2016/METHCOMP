@@ -200,7 +200,6 @@ int main(int argc, char const *argv[]) {
             assembleFile(reassembleFile, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
             reassembleFile.close();
             chromFile.close();
-            // arithmeticFile.close();
             nameFile.close();
 
         }
@@ -212,9 +211,6 @@ int main(int argc, char const *argv[]) {
 
     std::chrono::steady_clock::time_point end2 = std::chrono::steady_clock::now();
     std::cout << "Decompression takes = " << std::chrono::duration_cast<std::chrono::milliseconds>(end2 - end1).count() << "ms" << "\n-------" <<std::endl;
-    // int code_value_bits = 34;
-    // int num_of_base_chars = 256;
-    // encoderRandomNumber("randomNum256", code_value_bits, num_of_base_chars);
-    // decoderRandomNumber(code_value_bits, num_of_base_chars);
+
     return 0;
 }
