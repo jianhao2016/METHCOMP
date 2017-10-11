@@ -1,0 +1,6 @@
+*.bed
+*.bed.gz
+*.sh
+*.o
+debugData
+myfile
