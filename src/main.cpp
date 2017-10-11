@@ -76,6 +76,7 @@ int main(int argc, char const *argv[]) {
 
         std::string fileName(argv[2]);
         fileName = inputFilePath + fileName;
+        std::cout << "compressing " << fileName << "..." << '\n';
         std::ifstream infile(fileName);
         if (!infile)
         {
@@ -173,7 +174,7 @@ int main(int argc, char const *argv[]) {
         std::cout << "-------------------------------------" << '\n';
 
         try {
-            std::ofstream reassembleFile(dataPath + "/reassembleFile_" + argv[2], std::ios::out);
+            std::ofstream reassembleFile(dataPath + "DerivedData/reassembleFile_" + argv[2], std::ios::out);
             if (!reassembleFile.is_open()) {
                 std::cout << "reassembleFile open failed." << '\n';
                 throw -1;
