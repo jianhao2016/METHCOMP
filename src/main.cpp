@@ -106,7 +106,13 @@ int main(int argc, char const *argv[]) {
     path_to_output_compressed += file_name;
     path_to_output_compressed += '/';  // path to compression output folder, with '/' ending.
 
-    std::string makeDir("mkdir -p " + path_to_output_compressed);
+    // std::string makeDir("mkdir -p " + path_to_output_compressed);
+    std::string makeDir("mkdir -p ");
+    if (strcmp(argv[1], "decompress") == 0) {
+        makeDir += path_to_output;
+    } else {
+        makeDir += path_to_output_compressed;
+    }
 
     // std::cout << "full_path_to_file = " << full_path_to_file  << '\n';
     // std::cout << "file_name = " << file_name << '\n'; // name only. no extension
@@ -225,15 +231,16 @@ int main(int argc, char const *argv[]) {
 
         std::cout << "\nStart Decoding..." << '\n';
         std::cout << "-------------------------------------" << '\n';
+
         if (strcmp(argv[1], "decompress") == 0) {
             path_to_output_compressed = file_path;
-            file_path.pop_back();
-            path_to_output = getPath(file_path);
             file_name = getFileName(full_path_to_file, "_");
+            // file_path.pop_back();
+            // path_to_output = getPath(file_path);
 
-            std::cout << "path_to_output_compressed = " << path_to_output_compressed << '\n';
-            std::cout << "path_to_output = " << path_to_output << '\n';
-            std::cout << "file_name = " << file_name << '\n';
+            // std::cout << "path_to_output_compressed = " << path_to_output_compressed << '\n';
+            // std::cout << "path_to_output = " << path_to_output << '\n';
+            // std::cout << "file_name = " << file_name << '\n';
         }
 
         try {
