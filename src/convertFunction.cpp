@@ -9,6 +9,8 @@
 #include <stdio.h>
 #include <iostream>
 #include <string>
+#include <sys/types.h>  // for determining wether a argument is file or not.
+#include <sys/stat.h>
 #include "../includes/convertFunction.h"
 
 std::string convertRGB(uint8_t percentage){
@@ -158,4 +160,50 @@ void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::
     }
     // end of Arimetic Decoder setup.
     std::cout << "Decompression finished. Number of lines in reassembleFile = " << std::dec << rowNum << '\n';
+}
+
+int is_regular_file(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISREG(path_stat.st_mode);
+}
+
+std::string getFileName(std::string pathToFile, std::string delimiter) {
+    size_t sep = pathToFile.find_last_of("\\/");
+    std::string fileName;
+    if (sep != std::string::npos){
+        fileName = pathToFile.substr(sep + 1, pathToFile.size() - sep - 1);
+    }
+    else {
+        // when the pathToFile contains on '/'. It was directly the file.
+        fileName = pathToFile;
+    }
+
+    std::string name;
+    size_t dot = fileName.find_last_of(delimiter);
+    // size_t dot = fileName.find_last_of(".");
+    if (dot != std::string::npos)
+    {
+        name = fileName.substr(0, dot);
+    }
+    else
+    {
+        name = fileName;
+    }
+    return name;
+}
+
+std::string getPath(std::string pathToFile) {
+    size_t sep = pathToFile.find_last_of("\\/");
+    std::string file_path;
+    if (sep != std::string::npos){
+        file_path = pathToFile.substr(0, sep + 1);
+    }
+    else {
+        // when the pathToFile contains on '/', which means inside current folder.
+        file_path = "";
+    }
+    // file_path += '/';
+    return file_path;
 }

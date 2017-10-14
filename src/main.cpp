@@ -16,6 +16,8 @@
 #include <sstream>		// for parsing the line.
 #include <array>
 #include <chrono>		// for timing
+#include <sys/types.h>  // for determining wether a argument is file or not.
+#include <sys/stat.h>
 
 #include "../includes/row.h"
 #include "../includes/inputData.h"
@@ -41,27 +43,79 @@
 
 int main(int argc, char const *argv[]) {
     std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    if (argc <= 3) {
-        // user forget to input the test fileName!
+    if (argc < 3) {
+        // The first 3 arguments are crutial to run the program.
         if (argv[0]) {
-            std::cout << "Usage: " << argv[0] << " <mode> <fileName> <path_to_file>" << '\n';
+            std::cout << "Usage: " << argv[0] << " <mode> <path to file> <path to output folder>" << '\n';
         } else {
-            std::cout << "Usage: <program name> <mode> <fileName> <path_to_file>" << '\n';
+            std::cout << "Usage: <program name> <mode> <path to file> <path to output folder>" << '\n';
         }
+        std::cout << "-----\n** <path to folder> is optional. If not specified the output folder will be in the same directory of input file." << '\n';
         exit(1);
     }
 
-    std::string dataPath("../data/");
-    std::string inputFilePath(dataPath);
-    if (argc >= 4) {
-        if (strcmp(argv[3], ".") != 0) {
-            inputFilePath += argv[3];
-            // inputFilePath += "/";
-        }
+    if (!((strcmp(argv[1], "full") == 0) || (strcmp(argv[1], "compress") == 0) || (strcmp(argv[1], "decompress") == 0))) {
+        std::cout << "** <mode> ERROR: mode can be only chosen from \"full\", \"compress\" or \"decompress\"." << '\n';
+        exit(1);
     }
-    std::string makeDir("mkdir -p " + dataPath + "DerivedData/compressed_" + argv[2]);
+
+    std::string full_path_to_file(argv[2]);
+    if (!is_regular_file(full_path_to_file.c_str())) {
+        std::cout << "\"" << full_path_to_file << "\" is not a valid file! program terminated."  << '\n';
+        exit(1);
+    }
+    // By far, we have check the input of first three arguments.
+
+    std::string running_mode;
+    if (strcmp(argv[1], "full") == 0) {
+        running_mode = "Running compresion and decompression on ";
+    } else if (strcmp(argv[1], "compress") == 0) {
+        running_mode = "Running compression on ";
+    } else if (strcmp(argv[1], "decompress") == 0){
+        running_mode = "Running decompression on ";
+    }
+
+    std::string file_name;
+    file_name = getFileName(full_path_to_file, "."); // return name of file only. Without extension.
+
+    std::cout << "+++++++++++\n" << running_mode << file_name << '\n' << "+++++++++++\n";
+
+    std::string file_path;
+    file_path = getPath(full_path_to_file); // return the directory only, with '/' ending.
+
+    std::string path_to_output;  // path to output folder, with '/' ending.
+    if (argc >= 4) {
+    // if the user enter last argv <path to output folder>
+        if (strcmp(argv[3], ".") != 0) {
+            // user specifies output path.
+            path_to_output = argv[3];
+            if (path_to_output.back() != '/') {
+                path_to_output += '/';
+            }
+        } else {
+            // user enter '.' so path_to_output = current directory;
+            path_to_output = "DerivedData/";
+        }
+    } else {
+        // user enter 3 arguments only. output in the same directory of input
+        path_to_output = file_path;
+        path_to_output += "DerivedData/";
+    }
+    std::string path_to_output_compressed(path_to_output);
+    path_to_output_compressed += "compressed_";
+    path_to_output_compressed += file_name;
+    path_to_output_compressed += '/';  // path to compression output folder, with '/' ending.
+
+    std::string makeDir("mkdir -p " + path_to_output_compressed);
+
+    // std::cout << "full_path_to_file = " << full_path_to_file  << '\n';
+    // std::cout << "file_name = " << file_name << '\n'; // name only. no extension
+    // std::cout << "file_path = " << file_path << '\n'; // path only. with '/'.
+    // std::cout << "path_to_output = " << path_to_output << '\n'; // end with '/'
+    // std::cout << "path_to_output_compressed = " << path_to_output_compressed << '\n'; // end with '/'
+    // std::cout << "makeDir = " << makeDir << '\n';
+
     system(makeDir.c_str());
-    // system("mkdir -p ../data/DerivedData");
 
 
     // integer implementation of arithmetic coding needs to specific a bit string. the code_value_bits is the length of that string.
@@ -69,19 +123,18 @@ int main(int argc, char const *argv[]) {
     int16_t num_of_strands(3);
     // each interger in [-2^31, +2^31)  will be split into 4 * 2^8 base value.
     int16_t num_of_base_chars(256);
-    std::string outputBitFile(dataPath + "DerivedData/compressed_" + argv[2] +  "/outfileArInt_" + argv[2]);
+    std::string outputBitFile(path_to_output_compressed + file_name + "_outfileArInt");
 
     if (strcmp(argv[1], "compress") ==0 || strcmp(argv[1], "full") == 0) {
         std::cout << "COMPRESSION!" << '\n';
 
-        std::string fileName(argv[2]);
-        fileName = inputFilePath + fileName;
+        std::string fileName(full_path_to_file);
         std::cout << "compressing " << fileName << "..." << '\n';
         std::ifstream infile(fileName);
         if (!infile)
         {
             // Print an error and exit
-            std::cerr << "File could not be opened for reading!" << '\n';
+            std::cerr << fileName << " could not be opened for reading!" << '\n';
             exit(1);
         }
 
@@ -143,8 +196,8 @@ int main(int argc, char const *argv[]) {
             std::cout << "==== end of encoding function ====" << '\n';
 
             // output the chrom list and name list.
-            std::ofstream outfileChrom(dataPath + "DerivedData/compressed_" + argv[2] + "/outfileChrom_" + argv[2], std::ios::out);
-            std::ofstream outfileName(dataPath + "DerivedData/compressed_" + argv[2] + "/outfileName_" + argv[2], std::ios::out);
+            std::ofstream outfileChrom(path_to_output_compressed + file_name + "_outfileChrom", std::ios::out);
+            std::ofstream outfileName(path_to_output_compressed + file_name + "_outfileName", std::ios::out);
             if (outfileChrom.is_open() && outfileName.is_open()) {
                 InputData::dumpLists(outfileChrom, outfileName);
             } else {
@@ -172,31 +225,43 @@ int main(int argc, char const *argv[]) {
 
         std::cout << "\nStart Decoding..." << '\n';
         std::cout << "-------------------------------------" << '\n';
+        if (strcmp(argv[1], "decompress") == 0) {
+            path_to_output_compressed = file_path;
+            file_path.pop_back();
+            path_to_output = getPath(file_path);
+            file_name = getFileName(full_path_to_file, "_");
+
+            std::cout << "path_to_output_compressed = " << path_to_output_compressed << '\n';
+            std::cout << "path_to_output = " << path_to_output << '\n';
+            std::cout << "file_name = " << file_name << '\n';
+        }
 
         try {
-            std::ofstream reassembleFile(dataPath + "DerivedData/reassembleFile_" + argv[2], std::ios::out);
+            std::ofstream reassembleFile(path_to_output + "reconstructed_" + file_name, std::ios::out);
+            // std::ofstream reassembleFile(dataPath???? + "DerivedData/reassembleFile_" + argv[2], std::ios::out);
             if (!reassembleFile.is_open()) {
                 std::cout << "reassembleFile open failed." << '\n';
                 throw -1;
             }
 
-            std::ifstream chromFile(dataPath + "DerivedData/compressed_" + argv[2] + "/outfileChrom_" + argv[2], std::ios::in);
+            std::ifstream chromFile(path_to_output_compressed + file_name + "_outfileChrom", std::ios::in);
             if (!chromFile.is_open()) {
                 std::cout << "outfileChrom open failed." << '\n';
                 throw -1;
             }
 
-            std::ifstream nameFile(dataPath + "DerivedData/compressed_" + argv[2] + "/outfileName_" + argv[2], std::ios::in);
+            std::ifstream nameFile(path_to_output_compressed + file_name + "_outfileName", std::ios::in);
             if (!nameFile.is_open()) {
                 std::cout << "outfileName open failed." << '\n';
                 throw -1;
             }
 
 
-            std::string arithmeticFile = dataPath + "DerivedData/compressed_";
-            arithmeticFile += argv[2];
-            arithmeticFile += "/outfileArInt_";
-            arithmeticFile += argv[2];
+            std::string arithmeticFile(path_to_output_compressed + file_name + "_outfileArInt");
+            // std::string arithmeticFile = dataPath???? + "DerivedData/compressed_";
+            // arithmeticFile += argv[2];
+            // arithmeticFile += "/outfileArInt_";
+            // arithmeticFile += argv[2];
             assembleFile(reassembleFile, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
             reassembleFile.close();
             chromFile.close();
