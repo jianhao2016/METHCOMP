@@ -11,11 +11,13 @@
 
 OutputBitStream::OutputBitStream(std::string&& fileName) {
     // create a output file to store the code.
+    // std::string path = fileName;
+    // std::ofstream outfile(path, std::ios::out);
+    // if (outfile.is_open()) {
+    //     m_outfile = std::move(outfile);
     std::string path = fileName;
-    std::ofstream outfile(path, std::ios::out);
-    if (outfile.is_open()) {
-        m_outfile = std::move(outfile);
-    } else {
+    m_outfile.open(path, std::ios::out);
+    if (!m_outfile.is_open()) {
         std::cout << "Unable to open " << path << '\n';
         exit(1);
     }

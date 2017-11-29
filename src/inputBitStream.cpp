@@ -15,9 +15,11 @@
 #include "../includes/inputBitStream.h"
 
 InputBitStream::InputBitStream(int16_t code_value_bits, std::string&& fileName) : m_Code_value_bits(code_value_bits) {
-    std::ifstream input(fileName, std::ios::in | std::ios::binary);
+    // std::ifstream input(fileName, std::ios::in | std::ios::binary);
+    m_infile.open(fileName, std::ios::in | std::ios::binary);
     // std::ifstream input( "../data/" + fileName, std::ios::in | std::ios::binary | std::ios::ate );   // for std::read() only.
-    if (input.is_open()) {
+    // if (input.is_open()) {
+    if (m_infile.is_open()) {
 
         // std::ifstream::pos_type fileSize = input.tellg();
         // input.seekg(0, std::ios::beg);
@@ -25,10 +27,12 @@ InputBitStream::InputBitStream(int16_t code_value_bits, std::string&& fileName) 
         // std::deque<uint8_t> buffer(fileSize);
         // input.read( (char*)( &buffer[0]), fileSize ) ;
 
-        std::istreambuf_iterator<char> begin(input), end;
+        // std::istreambuf_iterator<char> begin(input), end;
+        // std::deque<uint8_t> buffer (begin, end);
+        std::istreambuf_iterator<char> begin(m_infile), end;
         std::deque<uint8_t> buffer (begin, end);
 
-        m_infile = std::move(input);
+        // m_infile = std::move(input);
         // move all bytes to bufferList.
         m_bufferList = std::move(buffer);
 
