@@ -44,19 +44,24 @@ std::string convertRGB(uint8_t percentage){
     return rgb;
 }
 
-void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString){
+// void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString){
+void assembleLine(std::FILE* reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString){
 
     static int32_t chromStartOld(0);
     int32_t chromStart = arInt.m_chromStartDiff + chromStartOld;
     int32_t chromEnd = chromStart + 1;
     chromStartOld = chromStart;
-    reassembleFile << chromString << '\t' << chromStart << '\t' << chromEnd <<'\t';
+    // reassembleFile << chromString << '\t' << chromStart << '\t' << chromEnd <<'\t';
     int32_t score = min(arInt.m_readCount, 1000);
-    reassembleFile << nameString << '\t' << score << '\t' << arInt.m_strand << '\t';
+    // reassembleFile << nameString << '\t' << score << '\t' << arInt.m_strand << '\t';
 
-    reassembleFile << chromStart << '\t' << chromEnd <<'\t';
+    // reassembleFile << chromStart << '\t' << chromEnd <<'\t';
     std::string rgb = convertRGB(arInt.m_percentage);
-    reassembleFile << rgb << '\t' << arInt.m_readCount << '\t' << static_cast<unsigned int>(arInt.m_percentage) << '\n';
+    // unsigned int percentage = static_cast<unsigned int>(arInt.m_percentage)
+    // reassembleFile << rgb << '\t' << arInt.m_readCount << '\t' << static_cast<unsigned int>(arInt.m_percentage) << '\n';
+    std::fprintf(reassembleFile, "%s\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%s\t%d\t%d\n", 
+            chromString.c_str(), chromStart, chromEnd, nameString.c_str(), score, arInt.m_strand, chromStart, chromEnd,
+            rgb.c_str(), arInt.m_readCount, static_cast<unsigned int>(arInt.m_percentage));
 }
 
 void parseString(std::string& str, std::string col[]) {
@@ -69,7 +74,8 @@ void parseString(std::string& str, std::string col[]) {
     }
 }
 
-void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars) {
+// void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars) {
+void assembleFile(std::FILE* reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars) {
 
     std::string arithmeticLine, chromFileLine, nameFileLine;
 
@@ -101,8 +107,7 @@ void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::
     BaseDecoder bd(base_decode, num_of_base_chars);
 
     startIntDecoderModel(firstInt_bd_array);
-    sd.startModel();
-    startIntDecoderModel(secondInt_bd_array);
+    sd.startModel(); startIntDecoderModel(secondInt_bd_array);
     bd.startModel();
 
     bool getEOF(false);

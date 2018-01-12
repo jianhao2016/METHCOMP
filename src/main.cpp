@@ -18,6 +18,7 @@
 #include <chrono>		// for timing
 #include <sys/types.h>  // for determining wether a argument is file or not.
 #include <sys/stat.h>
+#include <cstdio>
 
 #include "../includes/row.h"
 #include "../includes/inputData.h"
@@ -244,12 +245,15 @@ int main(int argc, char const *argv[]) {
         }
 
         try {
-            std::ofstream reassembleFile(path_to_output + "reconstructed_" + file_name, std::ios::out);
+            // std::ofstream reassembleFile(path_to_output + "reconstructed_" + file_name, std::ios::out);
             // std::ofstream reassembleFile(dataPath???? + "DerivedData/reassembleFile_" + argv[2], std::ios::out);
-            if (!reassembleFile.is_open()) {
-                std::cout << "reassembleFile open failed." << '\n';
-                throw -1;
-            }
+
+            // if (!reassembleFile.is_open()) {
+            //     std::cout << "reassembleFile open failed." << '\n';
+            //     throw -1;
+            // }
+
+            std::FILE* reassembleF_c = std::fopen((path_to_output + "reconstructed_" + file_name).c_str(), "w");
 
             std::ifstream chromFile(path_to_output_compressed + file_name + "_outfileChrom", std::ios::in);
             if (!chromFile.is_open()) {
@@ -269,8 +273,9 @@ int main(int argc, char const *argv[]) {
             // arithmeticFile += argv[2];
             // arithmeticFile += "/outfileArInt_";
             // arithmeticFile += argv[2];
-            assembleFile(reassembleFile, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
-            reassembleFile.close();
+            assembleFile(reassembleF_c, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
+            // reassembleFile.close();
+            std::fclose(reassembleF_c);
             chromFile.close();
             nameFile.close();
 

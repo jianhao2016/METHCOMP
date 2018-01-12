@@ -12,6 +12,7 @@
 #include <string>
 #include <fstream>
 #include <iostream>
+#include <cstdio>
 #include "arithmeticInt.h"
 #include "row.h"
 #include "inputData.h"
@@ -49,8 +50,10 @@ T fast_atoi( const char * str )
 }
 
 std::string convertRGB(Row& row);
-void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
-void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars);
+// void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
+// void assembleFile(std::ofstream& reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars);
+void assembleLine(std::FILE* reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
+void assembleFile(std::FILE* reassembleFile, std::ifstream& chromFile, std::ifstream& nameFile, std::string& arithmeticFile, int code_value_bits, int16_t num_of_strands, int16_t num_of_base_chars);
 int is_regular_file(const char *path);
 std::string getFileName(std::string pathToFile, std::string delimiter);
 std::string getPath(std::string pathToFile);

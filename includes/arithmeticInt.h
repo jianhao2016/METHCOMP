@@ -12,6 +12,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstdio>
 
 class ArithmeticInt {
 protected:
@@ -40,7 +41,8 @@ public:
     void dumpArithmeticInt(std::ofstream& outfile);
 
     friend std::ostream& operator<< (std::ostream& out, ArithmeticInt& ArInt);
-    friend void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
+    // friend void assembleLine(std::ofstream& reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
+    friend void assembleLine(std::FILE* reassembleFile, ArithmeticInt& arInt, std::string& chromString, std::string& nameString);
 
     int32_t getChromDiff()  {return m_chromStartDiff;}
     char getStrand()        {return m_strand;}
