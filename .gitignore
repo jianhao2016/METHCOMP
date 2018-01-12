@@ -6,3 +6,5 @@ debugData
 myfile
 cmpFile
 src/output
+writeString
+writeString.cpp
