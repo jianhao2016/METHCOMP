@@ -64,3 +64,30 @@ ArithmeticInt getArInt(std::stringstream& ss) {
 
 
 // ================ end of Integer encoder functions ==========
+
+Int24_Encoder getInt24Encoder(const Base& base){
+	BaseEncoder Int_be1(base, 256);
+	BaseEncoder Int_be2(base, 256);
+	BaseEncoder Int_be3(base, 256);
+
+	Int24_Encoder Int_be_array{ Int_be1, Int_be2, Int_be3 };
+
+	// Int_be_array[0].startModel();
+	return Int_be_array;
+}
+
+void startInt24EncoderModel(Int24_Encoder& IntEncoderArray) {
+    for (auto & elem : IntEncoderArray) {
+        elem.startModel();
+    }
+}
+
+void encodeInt24(int32_t x, Int24_Encoder& IntEncoderArray, Base& base, OutputBitStream& obs) {
+    uint8_t bytes[3]{0};
+    for (size_t ii = 0; ii < 3; ii++) {
+        bytes[ii] |= (x >> ((2 - ii) * 8));
+        IntEncoderArray[ii].encoder(bytes[ii], base, obs);
+    }
+}
+
+

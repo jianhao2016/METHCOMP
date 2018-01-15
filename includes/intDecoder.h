@@ -27,5 +27,14 @@ void startIntDecoderModel(Int32_Decoder& IntDecoderArray);
 
 int32_t decodeInt(Int32_Decoder& IntDecoderArray, Base& base, InputBitStream& ibs, bool& getEOF);
 
+//////////////////////////////////
+typedef std::array<BaseDecoder, 3> Int24_Decoder;
+
+Int24_Decoder getInt24Decoder(const Base& base);
+
+void startInt24DecoderModel(Int24_Decoder& IntDecoderArray);
+
+int32_t decodeInt24(Int24_Decoder& IntDecoderArray, Base& base, InputBitStream& ibs, bool& getEOF);
+
 
 #endif /* intDecoder_h */

@@ -59,6 +59,8 @@ void assembleLine(std::FILE* reassembleFile, ArithmeticInt& arInt, std::string& 
     std::string rgb = convertRGB(arInt.m_percentage);
     // unsigned int percentage = static_cast<unsigned int>(arInt.m_percentage)
     // reassembleFile << rgb << '\t' << arInt.m_readCount << '\t' << static_cast<unsigned int>(arInt.m_percentage) << '\n';
+
+    // std::fprintf(reassembleFile, "%s\t%d\t%d\n", chromString.c_str(), chromStart, chromEnd);
     std::fprintf(reassembleFile, "%s\t%d\t%d\t%s\t%d\t%c\t%d\t%d\t%s\t%d\t%d\n", 
             chromString.c_str(), chromStart, chromEnd, nameString.c_str(), score, arInt.m_strand, chromStart, chromEnd,
             rgb.c_str(), arInt.m_readCount, static_cast<unsigned int>(arInt.m_percentage));
@@ -97,17 +99,22 @@ void assembleFile(std::FILE* reassembleFile, std::ifstream& chromFile, std::ifst
 
     // For ArithmeticInt file.
     Base base_decode(code_value_bits);
+    // inputBitStream actually read the whole file into buffer.
     InputBitStream ibs(code_value_bits, std::move(arithmeticFile));
     ibs.printBuffer();
     base_decode.startDecoding(ibs);
 
+    // initialized decoders.
     Int32_Decoder firstInt_bd_array = getIntDecoder(base_decode);
     StrandDecoder sd(base_decode, num_of_strands);
     Int32_Decoder secondInt_bd_array = getIntDecoder(base_decode);
+    // Int24_Decoder secondInt_bd_array = getInt24Decoder(base_decode);
     BaseDecoder bd(base_decode, num_of_base_chars);
 
     startIntDecoderModel(firstInt_bd_array);
-    sd.startModel(); startIntDecoderModel(secondInt_bd_array);
+    sd.startModel(); 
+    startIntDecoderModel(secondInt_bd_array);
+    // startInt24DecoderModel(secondInt_bd_array);
     bd.startModel();
 
     bool getEOF(false);
@@ -125,7 +132,13 @@ void assembleFile(std::FILE* reassembleFile, std::ifstream& chromFile, std::ifst
         d_chromDiff = decodeInt(firstInt_bd_array, base_decode, ibs, getEOF);
         d_strand = sd.decoder(base_decode, ibs);
         d_readCount = decodeInt(secondInt_bd_array, base_decode, ibs, getEOF);
+        // d_readCount = decodeInt24(secondInt_bd_array, base_decode, ibs, getEOF);
         d_percentage = bd.decoder(base_decode, ibs);
+
+        // d_chromDiff = 0;
+        // d_strand = '*';
+        // d_readCount = 0;
+        // d_percentage = 0;
 
         arInt.Init(d_chromDiff, d_strand, d_readCount, d_percentage);
 

@@ -29,11 +29,15 @@
 // ---------- some useful functions for integer encoder --------
 
 typedef std::array<BaseEncoder, 4> Int32_Encoder;
+typedef std::array<BaseEncoder, 3> Int24_Encoder;
 
 Int32_Encoder getIntEncoder(const Base& base);
 void startIntEncoderModel(Int32_Encoder& IntEncoderArray);
 void encodeInt(int32_t x, Int32_Encoder& IntEncoderArray, Base& base, OutputBitStream& obs);
 
+Int24_Encoder getInt24Encoder(const Base& base);
+void startInt24EncoderModel(Int24_Encoder& IntEncoderArray);
+void encodeInt24(int32_t x, Int24_Encoder& IntEncoderArray, Base& base, OutputBitStream& obs);
 
 
 // Below are some Test functions.

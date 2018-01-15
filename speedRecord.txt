@@ -1,0 +1,67 @@
+speedRecord.txt
+:Author: jianhao
+:Email: jianhao2@illinois.edu
+
+writing speed max = 200 MB / 2.820s = 70 MB/s
+=====================
+decompression:
+
+for file 428AXW, origin size 2.6GB, lines: 43,810,874
+before: 176s 
+gzip  : 8s (330 MB/s)
+after : 125s (22 MB/s) [71% of before]
+        -> pure decoding, without any file I/O: 93s (28 MB/s or 471,084 Line/s)
+        -> write one string:     97s    (+4s for string)
+        -> write one integer:    104s   (+11s for integer)
+        -> write one string and one integer:    108s    (+4s +11s for string and int)
+        -> write one string and two integers:   115s    (+4s + 11s +7s for two ints)
+
+for file 677YTO, origin siz 13GB, lines: 232,405,151
+before: 825s 
+gzip  : 38s (350 MB/s)
+after : 547s (24 MB/s) [66% of before]
+        -> pure decoding, without any file I/O: 385s (34 MB/s or 603,649 Line/s)
+        -> write one string:    433s    (+48s for string)
+        -> write one integer:   460s    (+75s for int)
+        -> write one string and one integer:    494s    (+48s +61s for string and int)
+        -> write one string and two integers:   487s    (+48s +54s for string and two ints)
+
+
+for file 945JPE, origin size 48GB, lines: 829,073,433
+before: 2870s
+gzip  : 127s (380 MB/s)
+after : 1863s (27 MB/s) [65% of before]
+=====================
+decompression time of each column:
+
+for file 428AXW
+before: 176s
+gzip  : 8s (330 MB/s)
+after : 125s
+    -> pure decompression:              93s
+    -> pure i/o (set all to constant):  33s (~40 MB/s)
+
+time consumed by each column(other columns set to constant, decompression + writting file)
+column2(chormStart) :                   74s - 33s = 41s (48%)   -> 32bit integer. 4 decoder, dictionary [0, 255]
+column6(strand)     :                   35s - 33s = 2s  (2%)    -> dictionary [+, -, .]
+column10(readcount) :                   62s - 33s = 29s (34%)   -> 32bit integer. 4 decoder, dictionary [0, 255]
+column11(percentage):                   46s - 33s = 13s (15%)   -> dictionary [0, 100]
+                                        ---------------
+                                              sum = 85s
+
+for file 677YTO
+before: 825s
+gzip  : 38s (350 MB/s)
+after : 547s (24 MB/s)
+    -> pure decompression:              385s
+    -> pure i/o (subtract from total):  212s (62 MB/s)
+    -> pure i/o (set all to constant):  146s (47 MB/s)
+
+time consumed by each column(other columns set to constant, decompression + writting file)
+column2(chormStart) :                   337s - 146s = 191s (45%)   -> 32bit integer. 4 decoder, dictionary [0, 255]
+column6(strand)     :                   183s - 146s = 37s  (8%)    -> dictionary [+, -, .]
+column10(readcount) :                   307s - 146s = 161s (38%)   -> 32bit integer. 4 decoder, dictionary [0, 255]
+column11(percentage):                   178s - 146s = 32s (8%)     -> dictionary [0, 100]
+                                        ------------------
+                                                sum = 421s (421 + 146 = 567s)
+=====================

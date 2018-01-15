@@ -46,3 +46,41 @@ void startIntDecoderModel(Int32_Decoder& IntDecoderArray) {
         elem.startModel();
     }
 }
+
+///////////////////////////
+Int24_Decoder getInt24Decoder(const Base& base) {
+	BaseDecoder Int_bd1(base, 256);
+	BaseDecoder Int_bd2(base, 256);
+	BaseDecoder Int_bd3(base, 256);
+
+	Int24_Decoder Int_bd_array{Int_bd1, Int_bd2, Int_bd3};
+	return Int_bd_array;
+}
+
+int32_t decodeInt24(Int24_Decoder& IntDecoderArray, Base& base, InputBitStream& ibs, bool& getEOF) {
+    int32_t decode_v(0);
+    int16_t ch[3];
+
+    ch[0] = IntDecoderArray[0].decoder(base, ibs);
+    // see if we meet the EOF.
+    if (ch[0] > 0x00ff) {
+        std::cout << "base decoder symbol >= 0x00ff, break in decodeInt." << '\n';
+        getEOF = true;
+        return 0;
+    }
+    decode_v |= ((ch[0] & (0x00ff)) << 8);
+
+    for (size_t ii = 1; ii < 3; ii++) {
+        ch[ii] = IntDecoderArray[ii].decoder(base, ibs);
+        decode_v |= ((ch[ii] & (0x00ff)) << ((2 - ii) * 8));
+    }
+
+    return decode_v;
+}
+
+void startInt24DecoderModel(Int24_Decoder& IntDecoderArray) {
+    for (auto & elem : IntDecoderArray) {
+        elem.startModel();
+    }
+}
+

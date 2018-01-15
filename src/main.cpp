@@ -129,7 +129,8 @@ int main(int argc, char const *argv[]) {
     int16_t code_value_bits(32);
     int16_t num_of_strands(3);
     // each interger in [-2^31, +2^31)  will be split into 4 * 2^8 base value.
-    int16_t num_of_base_chars(256);
+    // int16_t num_of_base_chars(256);
+    int16_t num_of_percentage(101);   // [0, 100]
     std::string outputBitFile(path_to_output_compressed + file_name + "_outfileArInt");
 
     if (strcmp(argv[1], "compress") ==0 || strcmp(argv[1], "full") == 0) {
@@ -167,18 +168,30 @@ int main(int argc, char const *argv[]) {
 
             Int32_Encoder 	firstInt_be_array = getIntEncoder(base);
             Int32_Encoder 	secondInt_be_array = getIntEncoder(base);
+            // Int24_Encoder   secondInt_be_array = getInt24Encoder(base);
             StrandEncoder 	se(base, num_of_strands);
-            BaseEncoder		be(base, num_of_base_chars);
+            BaseEncoder		be(base, num_of_percentage);
 
             startIntEncoderModel(firstInt_be_array);
             se.startModel();
             startIntEncoderModel(secondInt_be_array);
+            // startInt24EncoderModel(secondInt_be_array);
             be.startModel();
 
             // encoder the first line.
             encodeInt(arInt.getChromDiff(), firstInt_be_array, base, obs);
             se.encoder(arInt.getStrand(), base, obs);
             encodeInt(arInt.getReadCount(), secondInt_be_array, base, obs);
+            // int32_t tmp_ReadCount;
+            // int32_t num_of_overflow(0);
+            // if (arInt.getReadCount() < 16777216)
+            //     tmp_ReadCount = arInt.getReadCount();
+            // else {
+            //     tmp_ReadCount = 16777215;
+            //     num_of_overflow++;
+            // }
+            // encodeInt24(tmp_ReadCount, secondInt_be_array, base, obs);
+
             be.encoder(arInt.getPercent(), base, obs);
 
             while (std::getline(infile, readLine)) {
@@ -189,6 +202,14 @@ int main(int argc, char const *argv[]) {
                 encodeInt(arInt.getChromDiff(), firstInt_be_array, base, obs);
                 se.encoder(arInt.getStrand(), base, obs);
                 encodeInt(arInt.getReadCount(), secondInt_be_array, base, obs);
+                // if (arInt.getReadCount() < 16777216)
+                //     tmp_ReadCount = arInt.getReadCount();
+                // else {
+                //     tmp_ReadCount = 16777215;
+                //     num_of_overflow++;
+                // }
+                // encodeInt24(tmp_ReadCount, secondInt_be_array, base, obs);
+
                 be.encoder(arInt.getPercent(), base, obs);
 
                 ++rowNum;           // increase the row counts.
@@ -201,6 +222,7 @@ int main(int argc, char const *argv[]) {
             // end of encoding.
             firstInt_be_array[0].doneEncoding(base, obs);
             std::cout << "==== end of encoding function ====" << '\n';
+            // std::cout << "number of overflowed read count = " << num_of_overflow << '\n';
 
             // output the chrom list and name list.
             std::ofstream outfileChrom(path_to_output_compressed + file_name + "_outfileChrom", std::ios::out);
@@ -273,7 +295,8 @@ int main(int argc, char const *argv[]) {
             // arithmeticFile += argv[2];
             // arithmeticFile += "/outfileArInt_";
             // arithmeticFile += argv[2];
-            assembleFile(reassembleF_c, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
+            // assembleFile(reassembleF_c, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_base_chars);
+            assembleFile(reassembleF_c, chromFile, nameFile, arithmeticFile, code_value_bits, num_of_strands, num_of_percentage);
             // reassembleFile.close();
             std::fclose(reassembleF_c);
             chromFile.close();

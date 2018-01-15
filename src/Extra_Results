@@ -1,0 +1,317 @@
+/Users/qizai/methylation/srv/exp_ENCSR656TQD
+-rw-r--r--  1 qizai  staff   7.8G Mar 17  2016 ENCFF326SHL.bed.gz
+-rw-r--r--  1 qizai  staff   7.9G Mar 17  2016 ENCFF742RFP.bed.gz
+-rw-r--r--  1 qizai  staff   625M Mar 17  2016 ENCFF699GKH.bed.gz
+-rw-r--r--  1 qizai  staff   2.5G Mar 17  2016 ENCFF494IMP.bed.gz
+--------------
+gunzipping ENCFF326SHL.bed.gz ...
+gunzipping ENCFF494IMP.bed.gz ...
+gunzipping ENCFF699GKH.bed.gz ...
+gunzipping ENCFF742RFP.bed.gz ...
+
+-rw-r--r--  1 qizai  staff    51G Mar 17  2016 ENCFF326SHL.bed
+-rw-r--r--  1 qizai  staff    51G Mar 17  2016 ENCFF742RFP.bed
+-rw-r--r--  1 qizai  staff   3.4G Mar 17  2016 ENCFF699GKH.bed
+-rw-r--r--  1 qizai  staff    15G Mar 17  2016 ENCFF494IMP.bed
+------
++++++++++++
+Running compresion and decompression on ENCFF326SHL
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR656TQD/ENCFF326SHL.bed...
+
+finishing... last byte = b0
+==== end of encoding function ====
+Compression takes = 4600162ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 1133580805 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 887287329
+Decompression takes = 3121283ms
+-------
+--- End of ENCFF326SHL.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF494IMP
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR656TQD/ENCFF494IMP.bed...
+
+finishing... last byte = 30
+==== end of encoding function ====
+Compression takes = 1268024ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 349013837 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 253642082
+Decompression takes = 893253ms
+-------
+--- End of ENCFF494IMP.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF699GKH
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR656TQD/ENCFF699GKH.bed...
+
+finishing... last byte = 90
+==== end of encoding function ====
+Compression takes = 306743ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 108516841 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 58607924
+Decompression takes = 226609ms
+-------
+--- End of ENCFF699GKH.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF742RFP
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR656TQD/ENCFF742RFP.bed...
+
+finishing... last byte = da
+==== end of encoding function ====
+Compression takes = 4389366ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 1114995622 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 887287329
+Decompression takes = 3060832ms
+-------
+--- End of ENCFF742RFP.bed ---
+
+
+
+-rw-r--r--  1 qizai  staff    51G Oct 27 01:50 DerivedData/reconstructed_ENCFF742RFP
+-rw-r--r--  1 qizai  staff   3.4G Oct 26 23:46 DerivedData/reconstructed_ENCFF699GKH
+-rw-r--r--  1 qizai  staff    15G Oct 26 23:37 DerivedData/reconstructed_ENCFF494IMP
+-rw-r--r--  1 qizai  staff    51G Oct 26 23:01 DerivedData/reconstructed_ENCFF326SHL
+
+  ***** DerivedData Size *****
+1.1G	./DerivedData/compressed_ENCFF326SHL
+1.0G	./DerivedData/compressed_ENCFF742RFP
+119M	./DerivedData/compressed_ENCFF699GKH
+333M	./DerivedData/compressed_ENCFF494IMP
+123G	./DerivedData
+243G	.
+ #### END of /Users/qizai/methylation/srv/exp_ENCSR656TQD/ ####
+<<<<<<<<<<<
+
+/Users/qizai/methylation/srv/exp_ENCSR888JFA
+-rw-r--r--  1 qizai  staff   7.3G Jan 17  2017 ENCFF400MQF.bed.gz
+-rw-r--r--  1 qizai  staff   7.3G Jan 17  2017 ENCFF590OFM.bed.gz
+-rw-r--r--  1 qizai  staff   479M Jan 17  2017 ENCFF977BKF.bed.gz
+-rw-r--r--  1 qizai  staff   2.3G Jan 17  2017 ENCFF369TZO.bed.gz
+--------------
+gunzipping ENCFF369TZO.bed.gz ...
+gunzipping ENCFF400MQF.bed.gz ...
+gunzipping ENCFF590OFM.bed.gz ...
+gunzipping ENCFF977BKF.bed.gz ...
+
+-rw-r--r--  1 qizai  staff    48G Jan 17  2017 ENCFF400MQF.bed
+-rw-r--r--  1 qizai  staff    48G Jan 17  2017 ENCFF590OFM.bed
+-rw-r--r--  1 qizai  staff   2.6G Jan 17  2017 ENCFF977BKF.bed
+-rw-r--r--  1 qizai  staff    13G Jan 17  2017 ENCFF369TZO.bed
+------
++++++++++++
+Running compresion and decompression on ENCFF369TZO
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR888JFA/ENCFF369TZO.bed...
+
+finishing... last byte = 80
+==== end of encoding function ====
+Compression takes = 1151635ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 306212184 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 232405151
+Decompression takes = 812794ms
+-------
+--- End of ENCFF369TZO.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF400MQF
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR888JFA/ENCFF400MQF.bed...
+
+finishing... last byte = 0
+==== end of encoding function ====
+Compression takes = 4079722ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 993579169 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 829073433
+Decompression takes = 2844200ms
+-------
+--- End of ENCFF400MQF.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF590OFM
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR888JFA/ENCFF590OFM.bed...
+
+finishing... last byte = 80
+==== end of encoding function ====
+Compression takes = 4084554ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 988336356 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 829073433
+Decompression takes = 2838975ms
+-------
+--- End of ENCFF590OFM.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF977BKF
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR888JFA/ENCFF977BKF.bed...
+
+finishing... last byte = e8
+==== end of encoding function ====
+Compression takes = 232702ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 88428071 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 43810874
+Decompression takes = 173169ms
+-------
+--- End of ENCFF977BKF.bed ---
+
+
+
+-rw-r--r--  1 qizai  staff   2.6G Oct 27 06:26 DerivedData/reconstructed_ENCFF977BKF
+-rw-r--r--  1 qizai  staff    48G Oct 27 06:19 DerivedData/reconstructed_ENCFF590OFM
+-rw-r--r--  1 qizai  staff    48G Oct 27 04:24 DerivedData/reconstructed_ENCFF400MQF
+-rw-r--r--  1 qizai  staff    13G Oct 27 02:28 DerivedData/reconstructed_ENCFF369TZO
+
+  ***** DerivedData Size *****
+943M	./DerivedData/compressed_ENCFF590OFM
+964M	./DerivedData/compressed_ENCFF400MQF
+292M	./DerivedData/compressed_ENCFF369TZO
+ 84M	./DerivedData/compressed_ENCFF977BKF
+114G	./DerivedData
+225G	.
+ #### END of /Users/qizai/methylation/srv/exp_ENCSR888JFA/ ####
+<<<<<<<<<<<
+
+/Users/qizai/methylation/srv/exp_ENCSR351IPU
+-rw-r--r--  1 qizai  staff   3.5G Mar 17  2016 ENCFF366UWF.bed
+-rw-r--r--  1 qizai  staff    15G Mar 17  2016 ENCFF936EAQ.bed
+------
++++++++++++
+Running compresion and decompression on ENCFF366UWF
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR351IPU/ENCFF366UWF.bed...
+
+finishing... last byte = 38
+==== end of encoding function ====
+Compression takes = 308345ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 114134776 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 58607924
+Decompression takes = 228909ms
+-------
+--- End of ENCFF366UWF.bed ---
+
+
+
++++++++++++
+Running compresion and decompression on ENCFF936EAQ
++++++++++++
+COMPRESSION!
+compressing /Users/qizai/methylation/srv/exp_ENCSR351IPU/ENCFF936EAQ.bed...
+
+finishing... last byte = 0
+==== end of encoding function ====
+Compression takes = 1262711ms
+--------
+DECOMPRESSION!
+
+Start Decoding...
+-------------------------------------
+Reading 352782709 bytes...
+End of ChromCout file.
+End of nameCount file.
+Decompression finished. Number of lines in reassembleFile = 253642082
+Decompression takes = 891857ms
+-------
+--- End of ENCFF936EAQ.bed ---
+
+
+
+-rw-r--r--  1 qizai  staff    15G Oct 27 07:11 DerivedData/reconstructed_ENCFF936EAQ
+-rw-r--r--  1 qizai  staff   3.5G Oct 27 06:35 DerivedData/reconstructed_ENCFF366UWF
+
+  ***** DerivedData Size *****
+109M	./DerivedData/compressed_ENCFF366UWF
+336M	./DerivedData/compressed_ENCFF936EAQ
+ 19G	./DerivedData
+ 37G	.
+ #### END of /Users/qizai/methylation/srv/exp_ENCSR351IPU/ ####
+<<<<<<<<<<<
+
