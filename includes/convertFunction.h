@@ -58,4 +58,7 @@ int is_regular_file(const char *path);
 std::string getFileName(std::string pathToFile, std::string delimiter);
 std::string getPath(std::string pathToFile);
 
+std::string getBlockName(std::string fileName, int num_of_line_per_block, int line_to_decode);
+std::string generateBlockName(std::string fileName, int block_index);
+
 #endif /* convertFunction_h */

@@ -15,6 +15,13 @@ std::vector<uint32_t> InputData::s_chromCountList;
 std::vector<std::string> InputData::s_nameList;
 std::vector<uint32_t> InputData::s_nameCountList;
 
+InputData::InputData() {
+	s_chromList.clear();
+	s_chromCountList.clear();
+	s_nameList.clear();
+	s_nameCountList.clear();
+}
+
 InputData::InputData(Row& row) {
     dataUpdate(row);
 }
@@ -49,6 +56,7 @@ void InputData::setFirstRow(Row& row) {
     s_nameList.push_back(row.m_column4);
     s_nameCountList.push_back(1);
 
+	s_chromStartOld = 0;
     m_chromStartDiff = row.m_column2 - s_chromStartOld;
     s_chromStartOld = row.m_column2;
 

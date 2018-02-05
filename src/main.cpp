@@ -47,9 +47,9 @@ int main(int argc, char const *argv[]) {
     if (argc < 3) {
         // The first 3 arguments are crutial to run the program.
         if (argv[0]) {
-            std::cout << "Usage: " << argv[0] << " <mode> <path to file> <path to output folder>" << '\n';
+            std::cout << "Usage: " << argv[0] << " <mode> <path to file> [optional <path to output folder> <num of line per block> <line to decode>]" << '\n';
         } else {
-            std::cout << "Usage: <program name> <mode> <path to file> <path to output folder>" << '\n';
+            std::cout << "Usage: <program name> <mode> <path to file> [optional <path to output folder> <num of line per block> <line to decode>]" << '\n';
         }
         std::cout << "-----\n** <path to folder> is optional. If not specified the output folder will be in the same directory of input file." << '\n';
         exit(1);
@@ -124,14 +124,41 @@ int main(int argc, char const *argv[]) {
 
     system(makeDir.c_str());
 
+    int num_of_line_per_block(-1);
+    if (argc >= 5) {
+        std::istringstream argv_4(argv[4]);
+        if (!(argv_4 >> num_of_line_per_block)) {
+            std::cerr << "Invalid number of lines per block!" << std::endl;
+            exit(1);
+        }
+        num_of_line_per_block = num_of_line_per_block * 1000;
+    }
 
+    int line_to_decode(-1);
+    if (argc >= 6) {
+        std::istringstream argv_5(argv[5]);
+        if (!(argv_5 >> line_to_decode)) {
+            std::cerr << "Invalid line number to decode!" << std::endl;
+            exit(1);
+        }
+    }
+
+    std::cout << "line per block = " << num_of_line_per_block << '\n';
+    std::cout << "line to decode = " << line_to_decode << '\n';
+
+    // std::string block_name;
+    // block_name = generateBlockName("file_test", line_to_decode/num_of_line_per_block);
+    // std::cout << "block name in enc = " << block_name << std::endl;
+
+    // block_name = getBlockName("file_test", num_of_line_per_block, line_to_decode);
+    // std::cout << "block name in dec = " << block_name << std::endl;
+    
     // integer implementation of arithmetic coding needs to specific a bit string. the code_value_bits is the length of that string.
     int16_t code_value_bits(32);
     int16_t num_of_strands(3);
     // each interger in [-2^31, +2^31)  will be split into 4 * 2^8 base value.
     // int16_t num_of_base_chars(256);
     int16_t num_of_percentage(101);   // [0, 100]
-    std::string outputBitFile(path_to_output_compressed + file_name + "_outfileArInt");
 
     if (strcmp(argv[1], "compress") ==0 || strcmp(argv[1], "full") == 0) {
         std::cout << "COMPRESSION!" << '\n';
@@ -146,93 +173,99 @@ int main(int argc, char const *argv[]) {
             exit(1);
         }
 
+        bool file_end = false;
+        int block_idx = 0;
         int rowNum(1);   // since we skip the first line.
-        // try{
+        do 
         {
-            std::string readLine;
-            // get the first line!!
-            std::getline(infile, readLine);
-            Row row(readLine);  // instantize a row.
-            ArithmeticInt arInt;
-            InputData inputdata;
-            // function setFirstRow is important to store the initial value of differential coding.
-            inputdata.setFirstRow(row);
-            arInt = inputdata;
+            std::cout << "---\n" << "processing block " << block_idx;
+            std::string outputBitFile(path_to_output_compressed + file_name + "_outfileArInt");
+            outputBitFile = generateBlockName(outputBitFile, block_idx);
+            // try{
+            {
+                std::string readLine;
+                // get the first line!!
+                std::getline(infile, readLine);
+                Row row(readLine);  // instantize a row.
+                ArithmeticInt arInt;
+                InputData inputdata;
+                // function setFirstRow is important to store the initial value of differential coding.
+                inputdata.setFirstRow(row);
+                arInt = inputdata;
 
-            // initialize encoders & output bit stream.
-            Base base(code_value_bits);
-            base.startEncoding();
+                // initialize encoders & output bit stream.
+                Base base(code_value_bits);
+                base.startEncoding();
 
-            OutputBitStream obs(std::move(outputBitFile));
-            obs.startOutputingBits();
+                OutputBitStream obs(std::move(outputBitFile));
+                obs.startOutputingBits();
 
-            Int32_Encoder 	firstInt_be_array = getIntEncoder(base);
-            Int32_Encoder 	secondInt_be_array = getIntEncoder(base);
-            // Int24_Encoder   secondInt_be_array = getInt24Encoder(base);
-            StrandEncoder 	se(base, num_of_strands);
-            BaseEncoder		be(base, num_of_percentage);
+                Int32_Encoder 	firstInt_be_array = getIntEncoder(base);
+                Int32_Encoder 	secondInt_be_array = getIntEncoder(base);
+                StrandEncoder 	se(base, num_of_strands);
+                BaseEncoder		be(base, num_of_percentage);
 
-            startIntEncoderModel(firstInt_be_array);
-            se.startModel();
-            startIntEncoderModel(secondInt_be_array);
-            // startInt24EncoderModel(secondInt_be_array);
-            be.startModel();
+                startIntEncoderModel(firstInt_be_array);
+                se.startModel();
+                startIntEncoderModel(secondInt_be_array);
+                be.startModel();
 
-            // encoder the first line.
-            encodeInt(arInt.getChromDiff(), firstInt_be_array, base, obs);
-            se.encoder(arInt.getStrand(), base, obs);
-            encodeInt(arInt.getReadCount(), secondInt_be_array, base, obs);
-            // int32_t tmp_ReadCount;
-            // int32_t num_of_overflow(0);
-            // if (arInt.getReadCount() < 16777216)
-            //     tmp_ReadCount = arInt.getReadCount();
-            // else {
-            //     tmp_ReadCount = 16777215;
-            //     num_of_overflow++;
-            // }
-            // encodeInt24(tmp_ReadCount, secondInt_be_array, base, obs);
-
-            be.encoder(arInt.getPercent(), base, obs);
-
-            while (std::getline(infile, readLine)) {
-                row.rowUpdate(readLine);  // update the row.
-                inputdata.dataUpdate(row);  // update the input data.
-                arInt = inputdata;          // slice the interger to new object.
-
+                // encoder the first line.
                 encodeInt(arInt.getChromDiff(), firstInt_be_array, base, obs);
                 se.encoder(arInt.getStrand(), base, obs);
                 encodeInt(arInt.getReadCount(), secondInt_be_array, base, obs);
-                // if (arInt.getReadCount() < 16777216)
-                //     tmp_ReadCount = arInt.getReadCount();
-                // else {
-                //     tmp_ReadCount = 16777215;
-                //     num_of_overflow++;
-                // }
-                // encodeInt24(tmp_ReadCount, secondInt_be_array, base, obs);
 
                 be.encoder(arInt.getPercent(), base, obs);
 
-                ++rowNum;           // increase the row counts.
-                // if (row.checkFail()) {
-                //     std::cout << row << '\n';   // print the fail line.
-                //     throw rowNum;
-                // }
+                // encoding happens when:
+                //  - we can read a file.
+                //  - block mode: yes, and row count < rows in a block
+                //              : not block mode
+                while (num_of_line_per_block == -1 || rowNum < num_of_line_per_block) {
+                    if (!std::getline(infile, readLine)) {
+                        break;
+                    }
+                    row.rowUpdate(readLine);  // update the row.
+                    inputdata.dataUpdate(row);  // update the input data.
+                    arInt = inputdata;          // slice the interger to new object.
+
+                    encodeInt(arInt.getChromDiff(), firstInt_be_array, base, obs);
+                    se.encoder(arInt.getStrand(), base, obs);
+                    encodeInt(arInt.getReadCount(), secondInt_be_array, base, obs);
+
+                    be.encoder(arInt.getPercent(), base, obs);
+
+                    ++rowNum;           // increase the row counts.
+                }
+
+                // end of encoding.
+                firstInt_be_array[0].doneEncoding(base, obs);
+
+                // output the chrom list and name list.
+                std::string outfileChrom_str = path_to_output_compressed + file_name + "_outfileChrom";
+                std::string outfileName_str = path_to_output_compressed + file_name + "_outfileName";
+                outfileChrom_str = generateBlockName(outfileChrom_str, block_idx);
+                outfileName_str = generateBlockName(outfileName_str, block_idx);
+
+                std::ofstream outfileChrom(outfileChrom_str, std::ios::out);
+                std::ofstream outfileName(outfileName_str, std::ios::out);
+
+                if (outfileChrom.is_open() && outfileName.is_open()) {
+                    InputData::dumpLists(outfileChrom, outfileName);
+                } else {
+                    std::cout << "fail saving Lists data!" << '\n';
+                }
             }
-
-            // end of encoding.
-            firstInt_be_array[0].doneEncoding(base, obs);
-            std::cout << "==== end of encoding function ====" << '\n';
-            // std::cout << "number of overflowed read count = " << num_of_overflow << '\n';
-
-            // output the chrom list and name list.
-            std::ofstream outfileChrom(path_to_output_compressed + file_name + "_outfileChrom", std::ios::out);
-            std::ofstream outfileName(path_to_output_compressed + file_name + "_outfileName", std::ios::out);
-            if (outfileChrom.is_open() && outfileName.is_open()) {
-                InputData::dumpLists(outfileChrom, outfileName);
+            // if rowNum is not number of line per block, then it must mean we meet the end of file.
+            if (rowNum != num_of_line_per_block) {
+                file_end = true;
             } else {
-                std::cout << "fail saving Lists data!" << '\n';
+                file_end = false;
+                rowNum = 1;
             }
-        }
+            block_idx++;
+        } while((num_of_line_per_block != -1) && (file_end != true));
+        std::cout << "==== end of encoding function ====" << '\n';
         // catch(int rowNum){
         //     std::cout << "Miss match in row: " << rowNum << '\n';
         //     rowNum = 0;
@@ -258,32 +291,27 @@ int main(int argc, char const *argv[]) {
         if (strcmp(argv[1], "decompress") == 0) {
             path_to_output_compressed = file_path;
             file_name = getFileName(full_path_to_file, "_");
-            // file_path.pop_back();
-            // path_to_output = getPath(file_path);
-
-            // std::cout << "path_to_output_compressed = " << path_to_output_compressed << '\n';
-            // std::cout << "path_to_output = " << path_to_output << '\n';
-            // std::cout << "file_name = " << file_name << '\n';
         }
 
         try {
-            // std::ofstream reassembleFile(path_to_output + "reconstructed_" + file_name, std::ios::out);
-            // std::ofstream reassembleFile(dataPath???? + "DerivedData/reassembleFile_" + argv[2], std::ios::out);
 
-            // if (!reassembleFile.is_open()) {
-            //     std::cout << "reassembleFile open failed." << '\n';
-            //     throw -1;
-            // }
+            std::string reassemble_str = path_to_output + "reconstructed_" + file_name;
+            reassemble_str = getBlockName(reassemble_str, num_of_line_per_block, line_to_decode);
 
-            std::FILE* reassembleF_c = std::fopen((path_to_output + "reconstructed_" + file_name).c_str(), "w");
+            std::FILE* reassembleF_c = std::fopen(reassemble_str.c_str(), "w");
 
-            std::ifstream chromFile(path_to_output_compressed + file_name + "_outfileChrom", std::ios::in);
+            std::string chromFile_str = path_to_output_compressed + file_name + "_outfileChrom";
+            chromFile_str = getBlockName(chromFile_str, num_of_line_per_block, line_to_decode);
+            std::cout << "reading file: " << chromFile_str << std::endl;
+            std::ifstream chromFile(chromFile_str, std::ios::in);
             if (!chromFile.is_open()) {
                 std::cout << "outfileChrom open failed." << '\n';
                 throw -1;
             }
 
-            std::ifstream nameFile(path_to_output_compressed + file_name + "_outfileName", std::ios::in);
+            std::string nameFile_str = path_to_output_compressed + file_name + "_outfileName";
+            nameFile_str = getBlockName(nameFile_str, num_of_line_per_block, line_to_decode);
+            std::ifstream nameFile(nameFile_str, std::ios::in);
             if (!nameFile.is_open()) {
                 std::cout << "outfileName open failed." << '\n';
                 throw -1;
@@ -291,6 +319,7 @@ int main(int argc, char const *argv[]) {
 
 
             std::string arithmeticFile(path_to_output_compressed + file_name + "_outfileArInt");
+            arithmeticFile = getBlockName(arithmeticFile, num_of_line_per_block, line_to_decode);
             // std::string arithmeticFile = dataPath???? + "DerivedData/compressed_";
             // arithmeticFile += argv[2];
             // arithmeticFile += "/outfileArInt_";

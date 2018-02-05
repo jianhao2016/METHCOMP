@@ -225,3 +225,21 @@ std::string getPath(std::string pathToFile) {
     // file_path += '/';
     return file_path;
 }
+
+std::string getBlockName(std::string fileName, int num_of_line_per_block, int line_to_decode) {
+    int block_index;
+	if ((num_of_line_per_block == -1) || (line_to_decode == -1)) {
+		block_index = 0;
+	} else {
+		block_index = line_to_decode/num_of_line_per_block;
+	}
+    std::string idx_str = std::to_string(block_index);
+    std::string block_name = fileName + '-' + idx_str;
+    return block_name;
+}
+
+std::string generateBlockName(std::string fileName, int block_index) {
+    std::string idx_str = std::to_string(block_index);
+    std::string block_name = fileName + '-' + idx_str;
+    return block_name;
+}

@@ -27,7 +27,7 @@ private:
     static std::vector<uint32_t> s_nameCountList;
 
 public:
-    InputData (){};
+    InputData ();
     InputData (Row& row);
     void setFirstRow(Row& row); // only use once at the first line.
     void dataUpdate(Row& row);
