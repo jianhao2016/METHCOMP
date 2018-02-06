@@ -1,0 +1,18 @@
+meeting_summary.txt
+
+:Author: qizai
+:Email: jianhao2@illinois.edu
+:Date: 2018-01-15 10:51
+
+1) go for the application notes.
+2) why you need a specialized algorithm
+    -> how much methylation data over there, pie chart
+    -> how relevent methylation 
+3) ENCODE already has 80,000 GB data, fairly standard file, have to be stored for years.
+    keeps piliing up, and this is just for one project.
+4) checkout rANS, see its performance.
+5) implement random access.
+6) intro, method and result in one paragraph.
+    -> all methods
+    -> keep results
+    -> remove discussion and conclusion.

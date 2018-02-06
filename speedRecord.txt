@@ -9,7 +9,7 @@ decompression:
 for file 428AXW, origin size 2.6GB, lines: 43,810,874
 before: 176s 
 gzip  : 8s (330 MB/s)
-after : 125s (22 MB/s) [71% of before]
+after : 125s [71% of before] (22 MB/s)
         -> pure decoding, without any file I/O: 93s (28 MB/s or 471,084 Line/s)
         -> write one string:     97s    (+4s for string)
         -> write one integer:    104s   (+11s for integer)
@@ -19,7 +19,7 @@ after : 125s (22 MB/s) [71% of before]
 for file 677YTO, origin siz 13GB, lines: 232,405,151
 before: 825s 
 gzip  : 38s (350 MB/s)
-after : 547s (24 MB/s) [66% of before]
+after : 547s [66% of before] (24 MB/s)
         -> pure decoding, without any file I/O: 385s (34 MB/s or 603,649 Line/s)
         -> write one string:    433s    (+48s for string)
         -> write one integer:   460s    (+75s for int)
@@ -30,7 +30,13 @@ after : 547s (24 MB/s) [66% of before]
 for file 945JPE, origin size 48GB, lines: 829,073,433
 before: 2870s
 gzip  : 127s (380 MB/s)
-after : 1863s (27 MB/s) [65% of before]
+after : 1863s  [65% of before]  (27 MB/s)
+
+
+
+
+
+
 =====================
 decompression time of each column:
 

@@ -3,6 +3,7 @@
 ## Requirements
   * For compiling: C++ 11
   * At least 2GB of RAM and 50GB of storage
+  * [optional] multi-core CPU for parallel decoding.
 
 ## Data Description
 The bedMethyl files are "revised" bed files. A typical bedMethyl file has 9 + 2 columns, with the first 9 columns matching those of the bed file and 2 additional columns containing coverage and percentage information
@@ -29,13 +30,18 @@ To run METHCOMP on the test file, use the following command:
 
 `./output full ../data/test .`
 
-This command will compress the test file into **"compressed_test"** and then decompress it to **"reconstructed_test"**. The compressed files and decompressed files are stored in the folder **DerivedData/**
+This command will compress the test file into **"compressed_test-0"** and then decompress it to **"reconstructed_test-0"**. The compressed files and decompressed files are stored in the folder **DerivedData/**
 
 To run the compression/decompression algorithm on an arbitrary methylation data file, use the following command:  
 
-`./output <mode> <path to file> <output folder path>`  
+`./output <mode> <path to file> <output folder path> [optional <number of line per block> <line to be decoded>]`  
 
 `mode` can be chosen from the following menu: **full** (joint compression and decompression), **compression** and **decompression**. When `<output folder path>` is omitted, the default output folder is **DerivedData/**
+two optional arguments, `<number of line per block>` and `<line to be decoded>`, are used for random access. To
+compress the original file in blocks, enter the number of lines in each block you would like to. To decoded a specific
+line, enter the line number to decode the block it belongs to.
+
+The `auto_script` is for parallel decoding.
 
 ## Output Files
 The compressed files and decompressed files are named **"compressed_\<file name\>"** and **"reconstructed_\<file name\>"**
