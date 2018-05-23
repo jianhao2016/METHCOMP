@@ -1,6 +1,5 @@
 *.bed
 *.bed.gz
-*.sh
 *.o
 debugData
 myfile
@@ -11,3 +10,10 @@ writeString.cpp
 output
 wirteString*
 data/*
+big_decomp*
+big_files.sh
+decompress_result.txt
+full_compress.sh
+full_decompress.sh
+template.sh
+wholeTest.sh
