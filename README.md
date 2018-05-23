@@ -36,9 +36,12 @@ To run the compression/decompression algorithm on an arbitrary methylation data 
 
 `./output <mode> <path to file> <output folder path> [optional <number of line per block> <line to be decoded>]`  
 
-Or use the scripts for block-mode compression/decompression:
+Or use the scripts for block-mode compression:
 
 `source auto_compress.sh <path to file> <output path> [optional <lines in each block>]`
+
+And block-mode decompression:
+
 `source auto_decompress.sh <file name> <file directory> <output path> [optional <lines in each block>]`
 
 `mode` can be chosen from the following menu: **full** (joint compression and decompression), **compress** and **decompress**. When `<output folder path>` is omitted, the default output folder is **DerivedData/**.
